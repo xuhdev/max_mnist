@@ -22,10 +22,10 @@ RESTPLUS_MASK_SWAGGER = False
 SWAGGER_UI_DOC_EXPANSION = 'none'
 
 # API metadata
-API_TITLE = 'MAX'
-API_DESC = 'An API for serving models'
+API_TITLE = 'MAX MNIST-Digit Recognition'
+API_DESC = 'Classify digits in the image'
 API_VERSION = '0.1'
 
 # default model
-MODEL_NAME = ''
-DEFAULT_MODEL_PATH = 'assets/{}'.format(MODEL_NAME)
+DEFAULT_MODEL_PATH = 'assets/'
+MODEL_ARCHITECTURE = ''

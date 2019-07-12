@@ -15,6 +15,7 @@
 #
 
 from maxfw.model import MAXModelWrapper
+from keras.models import model_from_json
 
 import logging
 from config import DEFAULT_MODEL_PATH
@@ -37,6 +38,11 @@ class ModelWrapper(MAXModelWrapper):
         logger.info('Loading model from: {}...'.format(path))
 
         # Load the graph
+        with open('model_architecture.json', 'r') as f:
+            model = model_from_json(f.read())
+
+        # Load weights into the new model
+        model.load_weights('model_weights.h5')
 
         # Set up instance variables and required inputs for inference
 
