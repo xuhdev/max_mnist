@@ -27,5 +27,4 @@ API_DESC = 'Classify digits in the image'
 API_VERSION = '0.1'
 
 # default model
-DEFAULT_MODEL_PATH = 'assets/'
-MODEL_ARCHITECTURE = ''
+DEFAULT_MODEL_PATH = 'assets/model_structure.h5'

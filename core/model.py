@@ -15,7 +15,11 @@
 #
 
 from maxfw.model import MAXModelWrapper
-from keras.models import model_from_json
+from keras.models import load_model
+from keras.preprocessing.image import img_to_array
+from PIL import Image
+import numpy as np
+import io
 
 import logging
 from config import DEFAULT_MODEL_PATH
@@ -36,23 +40,22 @@ class ModelWrapper(MAXModelWrapper):
 
     def __init__(self, path=DEFAULT_MODEL_PATH):
         logger.info('Loading model from: {}...'.format(path))
-
         # Load the graph
-        with open('model_architecture.json', 'r') as f:
-            model = model_from_json(f.read())
-
-        # Load weights into the new model
-        model.load_weights('model_weights.h5')
-
-        # Set up instance variables and required inputs for inference
-
+        self.model = load_model(path)
+        self.model._make_predict_function()
         logger.info('Loaded model')
 
     def _pre_process(self, inp):
-        return inp
+        img = Image.open(io.BytesIO(inp))
+        print('reading image..', img.size)
+        image = img_to_array(img)
+        print('image array shape..',image.shape)
+        image = np.expand_dims(image, axis=0)
+        return image
 
     def _post_process(self, result):
+        result = np.argmax(result)
         return result
 
     def _predict(self, x):
-        return x
+        return self.model.predict(x)
