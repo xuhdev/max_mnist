@@ -17,8 +17,8 @@
 FROM codait/max-base:v1.1.3
 
 # Fill in these with a link to the bucket containing the model and the model file name
-# ARG model_bucket=
-# ARG model_file=
+ARG model_bucket=https://github.com/SSaishruthi/max_mnist/raw/master/samples/model_architecture.json
+ARG model_file=https://github.com/SSaishruthi/max_mnist/raw/master/samples/model_weights.h5
 
 WORKDIR /workspace
 
