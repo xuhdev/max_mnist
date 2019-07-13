@@ -54,7 +54,7 @@ class ModelPredictAPI(PredictAPI):
 
         # Modify this code if the schema is changed
         print('predictions', preds)
-        label_preds = [{'probability':preds[0], 'prediction': preds[1]}]
+        label_preds = [{'probability': preds[0], 'prediction': preds[1]}]
         result['predictions'] = label_preds
         result['status'] = 'ok'
 

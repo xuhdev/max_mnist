@@ -49,7 +49,7 @@ class ModelWrapper(MAXModelWrapper):
         img = Image.open(io.BytesIO(inp))
         print('reading image..', img.size)
         image = img_to_array(img)
-        print('image array shape..',image.shape)
+        print('image array shape..', image.shape)
         image = np.expand_dims(image, axis=0)
         return image
 

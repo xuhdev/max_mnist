@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.com/IBM/MAX-Skeleton.svg?branch=master)](https://travis-ci.com/IBM/MAX-Skeleton)
-
+[![Build Status](https://travis-ci.org/SSaishruthi/max_mnist.svg?branch=master)](https://travis-ci.org/SSaishruthi/max_mnist)
 # Model Asset Exchange Scaffolding
 
 Docker based deployment skeleton for deep learning models on the Model Asset Exchange.

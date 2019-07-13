@@ -48,10 +48,9 @@ def test_metadata():
 def test_response():
     model_endpoint = 'http://localhost:5000/model/predict'
     file_path = 'samples/image0.jpeg'
-   
+
     with open(file_path, 'rb') as file:
         file_form = {'file': (file_path, file, 'image/jpeg')}
-
         r = requests.post(url=model_endpoint, files=file_form)
 
     print(r.content)
@@ -62,6 +61,7 @@ def test_response():
 
     # add sanity checks here
     assert response['predictions'][0]['prediction'] == 8
+
 
 if __name__ == '__main__':
     pytest.main([__file__])
