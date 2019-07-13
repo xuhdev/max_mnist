@@ -47,9 +47,8 @@ def test_metadata():
 
 def test_response():
     model_endpoint = 'http://localhost:5000/model/predict'
-    #file_path = 'samples/image0.jpeg'
-    file_path = '/Users/saishruthi.tn@ibm.com/Desktop/max_mnist/max_mnist/samples/image0.jpeg'
-
+    file_path = 'samples/image0.jpeg'
+   
     with open(file_path, 'rb') as file:
         file_form = {'file': (file_path, file, 'image/jpeg')}
 
