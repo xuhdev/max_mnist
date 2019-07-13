@@ -54,8 +54,12 @@ class ModelWrapper(MAXModelWrapper):
         return image
 
     def _post_process(self, result):
-        result = np.argmax(result)
-        return result
+        return [result['probability'][0][
+                    np.argmax(result['probability'])],
+                np.argmax(result['output'])]
 
     def _predict(self, x):
-        return self.model.predict(x)
+        predict_dict = {'output': self.model.predict(x),
+                        'probability': self.model.predict_proba(x)
+                        }
+        return predict_dict
