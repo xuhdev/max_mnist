@@ -1,169 +1,213 @@
 [![Build Status](https://travis-ci.org/SSaishruthi/max_mnist.svg?branch=master)](https://travis-ci.org/SSaishruthi/max_mnist)
-# Model Asset Exchange Scaffolding
 
-Docker based deployment skeleton for deep learning models on the Model Asset Exchange.
+# MAX-MNIST
 
-## Prerequisites:
+Classify the handwritten digits. 
 
-* You will need Docker installed. Follow the [installation instructions](https://docs.docker.com/install/) for your
-system.
-* Have the model saved in SavedModel format and uploaded to a public [Cloud Object Storage](https://console.bluemix.net/catalog/services/cloud-object-storage) bucket.
+Data Source: http://yann.lecun.com/exdb/mnist/
 
-## Step-by-step Guide to Wrapping a Model
+Framework: Keras
 
-### 1. Clone the skeleton
-Clone the `MAX-skeleton` repository locally. In a terminal run the following command:
+## Fork the template
 
-    $ git clone https://github.com/IBM/MAX-Skeleton
+1. Open the repository `https://github.com/IBM/MAX-Skeleton`
 
-The project files are structured into three main parts: model, api, and samples. The `model` directory will contain code used for loading the model and running the predictions. The `api` directory contains code to handle the inputs and outputs of the MAX microservice. The `samples` directory will contain sample data and notebooks for the user to try the service.
+2. Click on `Use this template` and provide a name for the repo.
+
+3. Clone the newly created repository using the below command:
+
+```bash
+$ git clone https://github.com/......
+```
+
+## Update Dockerfile
+
+Update `ARG model_bucket=` with the link to the model file public storage that can be downloaded and 
+`ARG model_file=` with the model file name. 
+   
+Here, 
+   - model file is stored in `https://github.com/SSaishruthi/max_mnist/raw/master/samples`
+   - model file is of type `h5`
+   - model file name is `model_structure.h5`
+   
+   _NOTE_: model file format will change according to the deep learning framework. 
+   
+
+## Update Hash Values
+
+Calculate and add the MD5 hashes of the files that will be downloaded to md5sums.txt. Here, hash will be
+calculated for `model_structure.h5`.
+
+## Update Package Requirements
+
+Add required python packages for running the model prediction to requirements.txt. 
+
+Following packages are required for this model,
+   - numpy==1.14.1
+   - Pillow==5.4.1
+   - h5py==2.9.0
+   - keras==2.2.4
+   - tensorflow==1.12.2
+   
+## Update Scripts
+
+1. In `code/model.py`, fill in the `MODEL_META_DATA`
+
+  1. Model id
+  2. Model name
+  3. Description of the model
+  4. Model type based on what the model does (e.g. Digit recognition)
+  5. Source to the model belongs
+  6. Model license
+  
+2. In `code/model.py`, load the model under `__init__():` method. 
+  Here, saved model `.h5` can be loaded using the below command:
+  
+ ```
+  # load the model using `load_model` keras function
+  self.model = load_model(path)
+  self.model._make_predict_function()
+```
+
+Reference:
+https://keras.io/getting-started/faq/
+
+3. In `code/model.py`, pre-processing functions required for the input should get into the `_pre_process` function.
+  Here, the input image needs to be read and converted into an array of acceptable shape.
+  
+  - Open the input image using:
+  ```
+  img = Image.open(io.BytesIO(inp))
+  ```
+  
+  - Convert the PIL image instance into numpy array and get in proper dimension.
+  ```
+  image = img_to_array(img)
+  image = np.expand_dims(image, axis=0)
+  return image
+  ```
+  
+  _NOTE_: Pre-processing is followed by prediction function which accepts only one input, 
+          so create a dictionary to hold the results if needed. In this case, we only have one input so we
+          are good to go.
+  
+4. Predicted digit and its probability are the expected output. Add these two fields to `label_prediction` in `api/predict.py` 
+  
+ ```
+ label_prediction = MAX_API.model('LabelPrediction', {
+ 'prediction': fields.Integer(required=True),
+ 'probability': fields.Float(required=True)
+ })
+ ```
+ 
+5. Place the prediction code under `_predict` method in `code/model.py`.
+  In the above step, we have defined two outputs. Now we need to extract these two results 
+  from the model. 
+  
+  _NOTE_: Prediction is followed by post-processing function which accepts only one input, 
+          so create a dictionary to hold the results in case of multiple outputs returned from the function.
+  
+  ```
+  predict_result = self.model.predict(x),
+  return predict_result
+  ```
+6. Post-processing function will go under `_post_process` method in `code/model.py`.
+  Result from the above step will be the input to this step. 
+  
+  Here, result from the above step will contain prediction probability for all 10 classes (digit 0 to 9).
+  
+  Extract prediction probability using,
+  
+  ```
+  np.amax(result),
+  ```
+  
+  Extract digit prediction using,
+  
+  ```
+  np.argmax(result)
+  ```
+  
+  Output response has two fields `status` and `predictions` as defined in the `api/predict.py`. 
+  
+  ```
+  predict_response = MAX_API.model('ModelPredictResponse', {
+    'status': fields.String(required=True, description='Response status message'),
+    'predictions': fields.List(fields.Nested(label_prediction), description='Predicted labels and probabilities')
+  })
+  ```
+  Predictions is of type list and holds the model results.
+  
+  Create a dictionary inside a list with key names used in `label_prediction` (step 4) and update the
+  model results accordingly.
+  
+  ```
+  return [{'probability': np.amax(result),
+           'prediction': np.argmax(result)}]
+  ```
+
+7. Assign the result from post-processing to the appropriate response field in `api/predict.py`.
+
+  ```
+  # Assign result
+  result['predictions'] = preds
+  ```
+
+8. Add test images to `sample/`
+
+
+## Update Test Script
+
+1. Add a few integration tests using pytest in tests/test.py to check that your model works. 
 
 Example:
-```
-./
-  app.py
-  model/
-    model.py
-  api/
-    metadata.py
-    predict.py
-```
 
-### 2. Modify the Dockerfile
-In the [`Dockerfile`](Dockerfile) we need to modify the following `ARG` instructions with a link to the
-public object storage bucket and the name of the file containing the serialized model.
-
-    ARG model_bucket=
-    ARG model_file=
-
-Then, calculate and add the MD5 hashes of the files that will be downloaded to `md5sums.txt`. Note: the hashes should be
-of the files after any extraction (eg after un-taring or un-ziping).
-
-To calculate the MD5 sum of a file run:
-```
-$ md5sum <FILE NAME>
-```
-
-### 3. Import the model in `core/model.py`
-
-This is where we handle the framework specific code for running predictions. The model is
-loaded in the `ModelWrapper.__init__()` method. Any code that needs to run when
-the model is loaded is also placed here.
-
-There are also separate functions for pre-processing, predictions, and post-processing that need to be implemented. The  `MAXModelWrapper` base class has a default `predict` method that internally calls these pre-processing, prediction, and post-processing functions.
-The model metadata should also be defined here.
+- Update model endpoint and sample input file path.
 
 ```
-class ModelWrapper(MAXModelWrapper):
-
-    MODEL_META_DATA = {
-        'id': 'ID',
-        'name': 'MODEL NAME',
-        'description': 'DESCRIPTION',
-        'type': 'MODEL TYPE',
-        'source': 'MODEL SOURCE'
-        'license': 'LICENSE'
-    }
-
-    def __init__(self, path=DEFAULT_MODEL_PATH):
-        pass
-
-    def _pre_process(self, inp):
-        return inp
-
-    def _post_process(self, result):
-        return result
-
-    def _predict(self, x):
-        return x
+model_endpoint = 'http://localhost:5000/model/predict'
+file_path = 'samples/image0.jpeg'
 ```
 
-### 4. Add input/output parsing code in `api/predict.py`
-
-The input and outputs requests are sent as JSON strings. We define the format of these requests using the `flask_restplus` package. In the skeleton we have the output response configured with the following schema:
+- Check if the prediction is `8`.
 
 ```
-{
-    "predictions": [
-        {
-            "probability": "float",
-            "label": "string",
-            "label_id": "string"
-        },
-    ],
-    "status": "string"
-}
-```
-The `predict_response` and `label_prediction` variables can be modified to amend the schema for each model's specific response format.
-
-To define the input format for a prediction we use Flask-RESTPlus's request parsing interface. The default input takes in a file.
-
-### 5. Create MAXApp instance in `app.py`
-
-The following code is already in the skeleton, but you may need to manually add extra APIs if needed.
-```
-from maxfw.core import MAXApp
-from api import ModelMetadataAPI, ModelPredictAPI
-from config import API_TITLE, API_DESC, API_VERSION
-
-max = MAXApp(API_TITLE, API_DESC, API_VERSION)
-max.add_api(ModelMetadataAPI, '/metadata')
-max.add_api(ModelPredictAPI, '/predict')
-max.run()
+assert response['predictions'][0]['prediction'] == 8
 ```
 
-### 6. Add integration tests
+2. To enable Travis CI testing uncomment the docker commands and pytest command in `.travis.yml`.
 
-Add a few integration tests using `pytest` in `tests/test.py` to check that your model works. To enable Travis CI
-testing uncomment the `docker` commands and `pytest` command in `.travis.yml`.
 
-### 7. Add requirements
+## Update API Configuration
 
-Add required python packages to `requirements.txt`
+Update the following API metadata in `config.py`.
 
-## Testing Out the Model with Docker
+```
+API_TITLE = 'MAX MNIST-Digit Recognition'
+- API_DESC = 'Classify digits in the image'
+- API_VERSION = '0.1'
 
-### 1. Build the model Docker image
+# Default model
+DEFAULT_MODEL_PATH = 'assets/model_structure.h5'
+```
+
+_NOTE_: Model files are always downloaded to `assets` folder inside docker. That's the reason for updating the
+`DEFAULT_MODEL_PATH` as `assets/model_structure.h5`
+
+## Build the model Docker image
 
 To build the docker image locally, run:
 
 ```
-$ docker build -t max-model .
+$ docker build -t max-mnist .
 ```
 
 If you want to print debugging messages make sure to set `DEBUG=True` in `config.py`.
 
-### 2. Run the model server
+### Run the model server
 
 To run the docker image, which automatically starts the model serving API, run:
 
 ```
-$ docker run -it -p 5000:5000 max-model
+$ docker run -it -p 5000:5000 max-mnist
 ```
-
-### 3. Test the API
-
-The API server automatically generates an interactive Swagger documentation page. Go to `http://localhost:5000` to load it. From there you can explore the API and also create test requests.
-
-Use the `model/predict` endpoint to load a test file and get a response from the API.
-
-```
-$ curl -F "file=@<INPUT_FILE_PATH>" -XPOST http://localhost:5000/model/predict
-```
-
-### 4. Run the Test Cases
-
-Install test required packages and run tests using `pytest`:
-
-```
-$ pip install -r requirements-test.txt
-$ pytest tests/test.py
-```
-
-## Provide documentation
-
-Copy the README files and add the relevant details for the specific model and use case, following the MAX standard. See other MAX models (e.g. [Object Detector](https://github.com/IBM/MAX-Object-Detector)) for examples. 
-
-More specifically, update the following README files:
-- Replace this `README.md` file with the completed `README-template.md` file
-- Complete the `samples/README.md` file with information about the data samples and the demo notebook, if any

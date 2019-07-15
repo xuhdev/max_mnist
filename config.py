@@ -26,5 +26,5 @@ API_TITLE = 'MAX MNIST-Digit Recognition'
 API_DESC = 'Classify digits in the image'
 API_VERSION = '0.1'
 
-# default model
+# Default model
 DEFAULT_MODEL_PATH = 'assets/model_structure.h5'

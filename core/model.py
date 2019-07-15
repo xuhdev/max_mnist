@@ -34,7 +34,7 @@ class ModelWrapper(MAXModelWrapper):
         'name': 'MAX-MNIST',
         'description': 'Classify digits',
         'type': 'Keras model',
-        'source': 'Keras',
+        'source': 'https://github.com/SSaishruthi/max_mnist',
         'license': 'Apache 2.0'
     }
 
@@ -54,12 +54,9 @@ class ModelWrapper(MAXModelWrapper):
         return image
 
     def _post_process(self, result):
-        return [result['probability'][0][
-                    np.argmax(result['probability'])],
-                np.argmax(result['output'])]
+        return [{'probability': np.amax(result),
+                 'prediction': np.argmax(result)}]
 
     def _predict(self, x):
-        predict_dict = {'output': self.model.predict(x),
-                        'probability': self.model.predict_proba(x)
-                        }
-        return predict_dict
+        predict_result = self.model.predict(x),
+        return predict_result

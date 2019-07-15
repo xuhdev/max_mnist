@@ -52,10 +52,8 @@ class ModelPredictAPI(PredictAPI):
         input_data = args['file'].read()
         preds = self.model_wrapper.predict(input_data)
 
-        # Modify this code if the schema is changed
-        print('predictions', preds)
-        label_preds = [{'probability': preds[0], 'prediction': preds[1]}]
-        result['predictions'] = label_preds
+        # Assign result
+        result['predictions'] = preds
         result['status'] = 'ok'
 
         return result
