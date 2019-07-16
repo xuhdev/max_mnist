@@ -53,12 +53,12 @@ Following packages are required for this model,
 
 1. In `code/model.py`, fill in the `MODEL_META_DATA`
 
-  1. Model id
-  2. Model name
-  3. Description of the model
-  4. Model type based on what the model does (e.g. Digit recognition)
-  5. Source to the model belongs
-  6. Model license
+  - Model id
+  - Model name
+  - Description of the model
+  - Model type based on what the model does (e.g. Digit recognition)
+  - Source to the model belongs
+  - Model license
   
 2. In `code/model.py`, load the model under `__init__():` method. 
   Here, saved model `.h5` can be loaded using the below command:
