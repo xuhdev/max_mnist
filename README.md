@@ -42,7 +42,8 @@ calculated for `model_structure.h5`.
 
 Add required python packages for running the model prediction to requirements.txt. 
 
-Following packages are required for this model,
+Following packages are required for this model:
+
    - numpy==1.14.1
    - Pillow==5.4.1
    - h5py==2.9.0
