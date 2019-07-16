@@ -101,50 +101,50 @@ https://keras.io/getting-started/faq/
  ```
  
 5. Place the prediction code under `_predict` method in `code/model.py`.
-  In the above step, we have defined two outputs. Now we need to extract these two results 
-  from the model. 
+   In the above step, we have defined two outputs. Now we need to extract these two results 
+   from the model. 
   
-  _NOTE_: Prediction is followed by post-processing function which accepts only one input, 
-          so create a dictionary to hold the results in case of multiple outputs returned from the function.
+   _NOTE_: Prediction is followed by post-processing function which accepts only one input, 
+           so create a dictionary to hold the results in case of multiple outputs returned from the function.
   
-  ```
-  predict_result = self.model.predict(x),
-  return predict_result
-  ```
+   ```
+   predict_result = self.model.predict(x),
+   return predict_result
+   ```
 6. Post-processing function will go under `_post_process` method in `code/model.py`.
-  Result from the above step will be the input to this step. 
+   Result from the above step will be the input to this step. 
   
-  Here, result from the above step will contain prediction probability for all 10 classes (digit 0 to 9).
+   Here, result from the above step will contain prediction probability for all 10 classes (digit 0 to 9).
   
-  Extract prediction probability using,
+   Extract prediction probability using,
   
-  ```
-  np.amax(result)
-  ```
+   ```
+   np.amax(result)
+   ```
   
-  Extract digit prediction using,
+   Extract digit prediction using,
   
-  ```
-  np.argmax(result)
-  ```
+   ```
+   np.argmax(result)
+   ```
   
-  Output response has two fields `status` and `predictions` as defined in the `api/predict.py`. 
+   Output response has two fields `status` and `predictions` as defined in the `api/predict.py`. 
   
-  ```
-  predict_response = MAX_API.model('ModelPredictResponse', {
-    'status': fields.String(required=True, description='Response status message'),
-    'predictions': fields.List(fields.Nested(label_prediction), description='Predicted labels and probabilities')
-  })
-  ```
-  Predictions is of type list and holds the model results.
+   ```
+   predict_response = MAX_API.model('ModelPredictResponse', {
+     'status': fields.String(required=True, description='Response status message'),
+     'predictions': fields.List(fields.Nested(label_prediction), description='Predicted labels and probabilities')
+   })
+   ```
+   Predictions is of type list and holds the model results.
   
-  Create a dictionary inside a list with key names used in `label_prediction` (step 4) and update the
-  model results accordingly.
+   Create a dictionary inside a list with key names used in `label_prediction` (step 4) and update the
+   model results accordingly.
   
-  ```
-  return [{'probability': np.amax(result),
-           'prediction': np.argmax(result)}]
-  ```
+   ```
+   return [{'probability': np.amax(result),
+            'prediction': np.argmax(result)}]
+   ```
 
 7. Assign the result from post-processing to the appropriate response field in `api/predict.py`.
 
