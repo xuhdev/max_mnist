@@ -51,14 +51,14 @@ Following packages are required for this model,
    
 ## Update Scripts
 
-1. In `code/model.py`, fill in the `MODEL_META_DATA`
-
-  - Model id
-  - Model name
-  - Description of the model
-  - Model type based on what the model does (e.g. Digit recognition)
-  - Source to the model belongs
-  - Model license
+1. In `code/model.py`, fill in the `MODEL_META_DATA` 
+       
+     - Model id
+     - Model name
+     - Description of the model
+     - Model type based on what the model does (e.g. Digit recognition)
+     - Source to the model belongs
+     - Model license
   
 2. In `code/model.py`, load the model under `__init__():` method. 
   Here, saved model `.h5` can be loaded using the below command:
@@ -75,21 +75,21 @@ https://keras.io/getting-started/faq/
 3. In `code/model.py`, pre-processing functions required for the input should get into the `_pre_process` function.
   Here, the input image needs to be read and converted into an array of acceptable shape.
   
-  - Open the input image using:
-  ```
-  img = Image.open(io.BytesIO(inp))
-  ```
+     - Open the input image using:
+     ```
+     img = Image.open(io.BytesIO(inp))
+     ```
   
-  - Convert the PIL image instance into numpy array and get in proper dimension.
-  ```
-  image = img_to_array(img)
-  image = np.expand_dims(image, axis=0)
-  return image
-  ```
+     - Convert the PIL image instance into numpy array and get in proper dimension.
+     ```
+     image = img_to_array(img)
+     image = np.expand_dims(image, axis=0)
+     return image
+     ```
   
-  _NOTE_: Pre-processing is followed by prediction function which accepts only one input, 
-          so create a dictionary to hold the results if needed. In this case, we only have one input so we
-          are good to go.
+     _NOTE_: Pre-processing is followed by prediction function which accepts only one input, 
+             so create a dictionary to hold the results if needed. In this case, we only have one input so we
+             are good to go.
   
 4. Predicted digit and its probability are the expected output. Add these two fields to `label_prediction` in `api/predict.py` 
   
@@ -119,7 +119,7 @@ https://keras.io/getting-started/faq/
   Extract prediction probability using,
   
   ```
-  np.amax(result),
+  np.amax(result)
   ```
   
   Extract digit prediction using,
@@ -160,20 +160,20 @@ https://keras.io/getting-started/faq/
 
 1. Add a few integration tests using pytest in tests/test.py to check that your model works. 
 
-Example:
+   Example:
 
-- Update model endpoint and sample input file path.
+    - Update model endpoint and sample input file path.
 
-```
-model_endpoint = 'http://localhost:5000/model/predict'
-file_path = 'samples/image0.jpeg'
-```
+    ```
+    model_endpoint = 'http://localhost:5000/model/predict'
+    file_path = 'samples/image0.jpeg'
+    ```
 
-- Check if the prediction is `8`.
+    - Check if the prediction is `8`.
 
-```
-assert response['predictions'][0]['prediction'] == 8
-```
+    ```
+    assert response['predictions'][0]['prediction'] == 8
+    ```
 
 2. To enable Travis CI testing uncomment the docker commands and pytest command in `.travis.yml`.
 
