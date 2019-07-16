@@ -52,6 +52,8 @@ Following packages are required for this model:
    
 ## Update Scripts
 
+All you need to start wrapping your model is pre-processing, prediction and post-processing code.
+
 1. In `code/model.py`, fill in the `MODEL_META_DATA` 
        
      - Model id
@@ -187,9 +189,7 @@ In `config.py`, update the API metadata.
   - API_DESC 
   - API_VERSION 
 
-# Default model
-DEFAULT_MODEL_PATH = 'assets/model_structure.h5'
-```
+Set `DEFAULT_MODEL_PATH = 'assets/model_structure.h5'`
 
 _NOTE_: Model files are always downloaded to `assets` folder inside docker. That's the reason for updating the
 `DEFAULT_MODEL_PATH` as `assets/model_structure.h5`
