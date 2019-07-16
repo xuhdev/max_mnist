@@ -181,12 +181,11 @@ https://keras.io/getting-started/faq/
 
 ## Update API Configuration
 
-Update the following API metadata in `config.py`.
+In `config.py`, update the API metadata.
 
-```
-API_TITLE = 'MAX MNIST-Digit Recognition'
-- API_DESC = 'Classify digits in the image'
-- API_VERSION = '0.1'
+  - API_TITLE 
+  - API_DESC 
+  - API_VERSION 
 
 # Default model
 DEFAULT_MODEL_PATH = 'assets/model_structure.h5'
