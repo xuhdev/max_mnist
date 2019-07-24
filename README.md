@@ -54,6 +54,21 @@ Following packages are required for this model:
    - keras==2.2.4
    - tensorflow==1.12.2
    
+
+## Update API Configuration
+
+In `config.py`, update the API metadata.
+
+  - API_TITLE 
+  - API_DESC 
+  - API_VERSION 
+
+Set `DEFAULT_MODEL_PATH = 'assets/model_structure.h5'`
+
+_NOTE_: Model files are always downloaded to `assets` folder inside docker. That's the reason for updating the
+`DEFAULT_MODEL_PATH` as `assets/model_structure.h5`
+
+   
 ## Update Scripts
 
 All you need to start wrapping your model is pre-processing, prediction and post-processing code.
@@ -198,19 +213,6 @@ https://keras.io/getting-started/faq/
 
 2. To enable Travis CI testing uncomment the docker commands and pytest command in `.travis.yml`.
 
-
-## Update API Configuration
-
-In `config.py`, update the API metadata.
-
-  - API_TITLE 
-  - API_DESC 
-  - API_VERSION 
-
-Set `DEFAULT_MODEL_PATH = 'assets/model_structure.h5'`
-
-_NOTE_: Model files are always downloaded to `assets` folder inside docker. That's the reason for updating the
-`DEFAULT_MODEL_PATH` as `assets/model_structure.h5`
 
 ## Build the model Docker image
 
