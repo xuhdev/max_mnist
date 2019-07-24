@@ -36,7 +36,11 @@ Here,
 ## Update Hash Values
 
 Calculate and add the MD5 hashes of the files that will be downloaded to md5sums.txt. Here, hash will be
-calculated for `model_structure.h5`.
+calculated for `model_structure.h5` using the command:
+
+```
+md5sum model_structure.h5
+```
 
 ## Update Package Requirements
 
@@ -54,6 +58,7 @@ Following packages are required for this model:
 
 All you need to start wrapping your model is pre-processing, prediction and post-processing code.
 
+
 1. In `code/model.py`, fill in the `MODEL_META_DATA` 
        
      - Model id
@@ -63,7 +68,9 @@ All you need to start wrapping your model is pre-processing, prediction and post
      - Source to the model belongs
      - Model license
   
-2. In `code/model.py`, load the model under `__init__():` method. 
+  
+  
+2. In `code/model.py`, load the model under `__init__()` method. 
   Here, saved model `.h5` can be loaded using the below command:
   
  ```
@@ -74,6 +81,8 @@ All you need to start wrapping your model is pre-processing, prediction and post
 
 Reference:
 https://keras.io/getting-started/faq/
+
+
 
 3. In `code/model.py`, pre-processing functions required for the input should get into the `_pre_process` function.
   Here, the input image needs to be read and converted into an array of acceptable shape.
@@ -93,6 +102,8 @@ https://keras.io/getting-started/faq/
      _NOTE_: Pre-processing is followed by prediction function which accepts only one input, 
              so create a dictionary to hold the results if needed. In this case, we only have one input so we
              are good to go.
+             
+             
   
 4. Predicted digit and its probability are the expected output. Add these two fields to `label_prediction` in `api/predict.py` 
   
@@ -102,6 +113,8 @@ https://keras.io/getting-started/faq/
  'probability': fields.Float(required=True)
  })
  ```
+ 
+ 
  
 5. Place the prediction code under `_predict` method in `code/model.py`.
    In the above step, we have defined two outputs. Now we need to extract these two results 
@@ -114,6 +127,8 @@ https://keras.io/getting-started/faq/
    predict_result = self.model.predict(x),
    return predict_result
    ```
+   
+   
 6. Post-processing function will go under `_post_process` method in `code/model.py`.
    Result from the above step will be the input to this step. 
   
@@ -149,12 +164,15 @@ https://keras.io/getting-started/faq/
             'prediction': np.argmax(result)}]
    ```
 
+
+
 7. Assign the result from post-processing to the appropriate response field in `api/predict.py`.
 
   ```
   # Assign result
   result['predictions'] = preds
   ```
+
 
 8. Add test images to `sample/`
 
