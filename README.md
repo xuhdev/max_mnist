@@ -63,10 +63,10 @@ In `config.py`, update the API metadata.
   - API_DESC 
   - API_VERSION 
 
-Set `DEFAULT_MODEL_PATH = 'assets/model_structure.h5'`
+Set `DEFAULT_MODEL_PATH = 'samples/model_structure.h5'`
 
 _NOTE_: Model files are always downloaded to `assets` folder inside docker. That's the reason for updating the
-`DEFAULT_MODEL_PATH` as `assets/model_structure.h5`
+`DEFAULT_MODEL_PATH` as `samples/model_structure.h5`
 
    
 ## Update Scripts
