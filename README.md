@@ -4,9 +4,11 @@
 
 Classify the handwritten digits. 
 
+![mnist](samples/mnist.png)
+
 Data Source: http://yann.lecun.com/exdb/mnist/
 
-Framework: Keras
+Framework : Keras
 
 # Steps
 
