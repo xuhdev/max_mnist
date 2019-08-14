@@ -37,13 +37,11 @@ Update,
 - `ARG model_bucket=` with the link to the model file public storage that can be downloaded
 - `ARG model_file=` with the model file name. 
    
-For testing purpose, download the pre-trained model weights from [here](https://github.com/SSaishruthi/max_mnist/raw/master/samples/model_structure.h5).
-Place this downloaded weight under `samples` directory, push the updates to your repository and modify the below path to point to your repository.
+For testing purpose, update as below:
 
-Path: https://github.com/<github_id>/<repo_name>/raw/master/samples`
+`model_bucket = https://github.com/SSaishruthi/max_mnist/raw/master/samples/model_structure.h5`
+`model_file = model_structure.h5`
 
-_NOTE_: If you have stored the model files in any other downloadable location, use the link in `model_bucket`
-    
 Calculate and add the MD5 hashes of the files that will be downloaded to md5sums.txt. 
 
 Here, hash will be calculated for `model_structure.h5` using the command:
@@ -130,6 +128,8 @@ https://keras.io/getting-started/faq/
  'probability': fields.Float(required=True)
  })
  ```
+ 
+ _NOTE_: These fields can very depending on the model.
  
 4. Place the prediction code under `_predict` method in `code/model.py`.
    In the above step, we have defined two outputs. Now we need to extract these two results 
