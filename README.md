@@ -8,7 +8,7 @@ Classify the handwritten digits.
 
 Data Source: http://yann.lecun.com/exdb/mnist/
 
-Framework : Keras
+Framework: Keras
 
 # Steps
 
