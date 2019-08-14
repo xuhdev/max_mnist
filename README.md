@@ -200,17 +200,17 @@ $ docker run -it -p 5000:5000 max-mnist
 
    Example:
 
-    - Update model endpoint and sample input file path.
+   - Update model endpoint and sample input file path.
 
-    ```
+ ```
     model_endpoint = 'http://localhost:5000/model/predict'
     file_path = 'samples/image0.jpeg'
-    ```
+ ```
 
-    - Check if the prediction is `8`.
+   - Check if the prediction is `8`.
 
-    ```
+ ```
     assert response['predictions'][0]['prediction'] == 8
-    ```
+ ```
 
 2. To enable Travis CI testing uncomment the docker commands and pytest command in `.travis.yml`.
