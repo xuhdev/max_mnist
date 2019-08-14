@@ -46,14 +46,19 @@ class ModelWrapper(MAXModelWrapper):
         logger.info('Loaded model')
 
     def _pre_process(self, inp):
+        # Open the input image
         img = Image.open(io.BytesIO(inp))
         print('reading image..', img.size)
+        # Convert the PIL image instance into numpy array and
+        # get in proper dimension.
         image = img_to_array(img)
         print('image array shape..', image.shape)
         image = np.expand_dims(image, axis=0)
         return image
 
     def _post_process(self, result):
+        # Extract prediction probability using `amax` and
+        # digit prediction using `argmax`
         return [{'probability': np.amax(result),
                  'prediction': np.argmax(result)}]
 
