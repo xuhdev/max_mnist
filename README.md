@@ -10,6 +10,17 @@ Data Source: http://yann.lecun.com/exdb/mnist/
 
 Framework: Keras
 
+# Requirements
+
+1. Docker
+2. Python IDE or code editors
+3. Pre-trained model weights stored in a downloadable location
+4. List of required python packages
+5. Input pre-processing code
+6. Prediction/Inference code
+7. Output variables
+8. Output post-processing code
+
 # Steps
 
 1. [Fork the Template and Clone the Repository](#fork-the-template-and-clone-the-repository)
@@ -37,11 +48,12 @@ $ git clone https://github.com/......
 Update,
 
 - `ARG model_bucket=` with the link to the model file public storage that can be downloaded
+
 - `ARG model_file=` with the model file name. 
    
 For testing purpose, update as below:
 
-`model_bucket = https://github.com/SSaishruthi/max_mnist/raw/master/samples/model_structure.h5`
+`model_bucket = https://github.com/SSaishruthi/max_mnist/raw/master/samples`
 `model_file = model_structure.h5`
 
 Calculate and add the MD5 hashes of the files that will be downloaded to md5sums.txt. 
@@ -73,10 +85,9 @@ Following packages are required for this model:
   - API_DESC 
   - API_VERSION 
 
-2. Set `DEFAULT_MODEL_PATH = 'assets/model_structure.h5'`
+2. Set `MODEL_NAME = 'model_structure.h5'`
 
-   _NOTE_: Model files are always downloaded to `assets` folder inside docker. That's the reason for updating the
-`  DEFAULT_MODEL_PATH` as `assets/model_structure.h5`
+   _NOTE_: Model files are always downloaded to `assets` folder inside docker.
 
 3. In `code/model.py`, fill in the `MODEL_META_DATA` 
        
