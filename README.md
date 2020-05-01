@@ -89,7 +89,7 @@ Following packages are required for this model:
 
    _NOTE_: Model files are always downloaded to `assets` folder inside docker.
 
-3. In `code/model.py`, fill in the `MODEL_META_DATA` 
+3. In `core/model.py`, fill in the `MODEL_META_DATA` 
        
      - Model id
      - Model name
@@ -102,7 +102,7 @@ Following packages are required for this model:
 
 All you need to start wrapping your model is pre-processing, prediction and post-processing code.
   
-1. In `code/model.py`, load the model under `__init__()` method. 
+1. In `core/model.py`, load the model under `__init__()` method. 
   Here, saved model `.h5` can be loaded using the below command:
   
  ```
@@ -114,7 +114,7 @@ All you need to start wrapping your model is pre-processing, prediction and post
 Reference:
 https://keras.io/getting-started/faq/
 
-2. In `code/model.py`, pre-processing functions required for the input should get into the `_pre_process` function.
+2. In `core/model.py`, pre-processing functions required for the input should get into the `_pre_process` function.
    Here, the input image needs to be read and converted into an array of acceptable shape.
   
   ```
@@ -144,7 +144,7 @@ https://keras.io/getting-started/faq/
  
  _NOTE_: These fields can very depending on the model.
  
-4. Place the prediction code under `_predict` method in `code/model.py`.
+4. Place the prediction code under `_predict` method in `core/model.py`.
    In the above step, we have defined two outputs. Now we need to extract these two results 
    from the model. 
   
@@ -156,7 +156,7 @@ https://keras.io/getting-started/faq/
    return predict_result
  ```
      
-5. Post-processing function will go under `_post_process` method in `code/model.py`.
+5. Post-processing function will go under `_post_process` method in `core/model.py`.
    Result from the above step will be the input to this step. 
   
    Here, result from the above step will contain prediction probability for all 10 classes (digit 0 to 9).
